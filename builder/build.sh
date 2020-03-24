@@ -10,10 +10,10 @@ if [[ ! -e tarballs/ArchLinuxARM-aarch64-latest.tar.gz ]]; then
 fi
 
 if [[ ! -e reboot_payload.bin ]]; then
-	wget https://github.com/CTCaer/hekate/releases/download/v5.1.1/hekate_ctcaer_5.1.1_Nyx_0.8.4.zip
-	unzip hekate_ctcaer_5.1.1_Nyx_0.8.4.zip hekate_ctcaer_5.1.1.bin
-	mv hekate_ctcaer_5.1.1.bin reboot_payload.bin
-	rm hekate_ctcaer_5.1.1_Nyx_0.8.4.zip
+	wget https://github.com/CTCaer/hekate/releases/download/v5.1.3/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip
+	unzip hekate_ctcaer_5.1.3_Nyx_0.8.6.zip hekate_ctcaer_5.1.3.bin
+	mv hekate_ctcaer_5.1.3.bin reboot_payload.bin
+	rm hekate_ctcaer_5.1.3_Nyx_0.8.6.zip
 fi
 
 umount -R build
@@ -21,7 +21,7 @@ rm -r build
 rm arch-boot.tar.gz arch-root.tar.gz
 
 mkdir build
-cp tarballs/*.pkg.* build/
+# cp tarballs/*.pkg.* build/
 cp build-stage2.sh base-pkgs optional-pkgs build/
 cp reboot_payload.bin build/reboot_payload.bin
 
