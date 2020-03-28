@@ -1,0 +1,27 @@
+# Maintainer: Your Name <youremail@domain.com>
+pkgname=switch-ffmpeg
+pkgver=1
+pkgrel=1
+epoch=
+pkgdesc=""
+arch=(any)
+url=""
+license=('GPL')
+depends=(jetson-ffmpeg)
+install=
+source=(git+https://gitlab.com/switchroot/switch-l4t-configs.git)
+sha256sums=(SKIP SKIP SKIP)
+noextract=()
+validpgpkeys=()
+
+prepare() {
+
+}
+
+build() {
+	
+}
+
+package() {
+
+}

@@ -1,0 +1,19 @@
+# Maintainer: Your Name <youremail@domain.com>
+pkgname=moonlight-qt
+pkgver=1
+pkgrel=1
+epoch=
+pkgdesc=""
+arch=(any)
+url=""
+license=('GPL')
+depends=(jetson-ffmpeg switch-ffmpeg)
+install=
+source=(git+.git)
+sha256sums=(SKIP SKIP SKIP)
+noextract=()
+validpgpkeys=()
+
+package() {
+
+}

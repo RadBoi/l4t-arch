@@ -1,0 +1,31 @@
+# Maintainer: Your Name <youremail@domain.com>
+pkgname=jetson-ffmpeg
+pkgver=1
+pkgrel=1
+epoch=
+pkgdesc=""
+arch=(any)
+url=""
+license=('GPL')
+install=
+source=(git+https://github.com/jocover/jetson-ffmpeg.git)
+sha256sums=(SKIP SKIP SKIP)
+noextract=()
+validpgpkeys=()
+
+prepare() {
+	cd "${pkgbase}-${pkgver}"
+	sed -e 's/aarch64-linux-gnu\///g' -i CMakeLists.txt
+}
+
+buid() {
+	mkdir build
+	cd build
+	cmake ..
+	make
+}
+
+package() {
+	make install
+	ldconfig
+}
