@@ -48,7 +48,7 @@ package() {
 	mkdir -p $pkgdir/usr/lib/firmware/ $pkgdir/usr/lib/systemd/
 	
 	# Move usr/lib/aarch64-linux-gnu -> usr/lib.
-	cp -r usr/lib/aarch64-linux-gnu/* $pkgdir/usr/lib/
+	# cp -r usr/lib/aarch64-linux-gnu/* $pkgdir/usr/lib/
 	
 	# Same for lib/firmware, lib/systemd.
 	cp -r lib/firmware/* $pkgdir/usr/lib/firmware/

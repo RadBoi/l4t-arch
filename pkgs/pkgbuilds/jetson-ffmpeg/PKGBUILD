@@ -1,4 +1,5 @@
 # Maintainer: Your Name <youremail@domain.com>
+pkgbase=jetson-ffmpeg
 pkgname=jetson-ffmpeg
 pkgver=1
 pkgrel=1
@@ -14,8 +15,8 @@ noextract=()
 validpgpkeys=()
 
 prepare() {
-	cd "${pkgbase}-${pkgver}"
-	sed -e 's/aarch64-linux-gnu\///g' -i CMakeLists.txt
+	cd "${pkgbase}"
+	# sed -e 's/aarch64-linux-gnu\///g' -i CMakeLists.txt
 }
 
 buid() {

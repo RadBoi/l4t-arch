@@ -55,19 +55,19 @@ make_iso(){
 
 	dd if=/dev/zero of=build/l4t-arch.img bs=1 count=0 seek=$size
 
-	## TODO: Format partitions
-	
-	## This doesn't work properly
-	# (echo n; echo p; echo 1; echo 1; echo 476; echo n; echo p; echo 2; echo ; echo ; echo w) | fdisk build/l4t-arch.img
+	parted -a optimal build/l4t-arch.img mkpart primary 0% 476MB
+	parted -a optimal build/l4t-arch.img mkpart primary 477MB 100%
 
-	## TODO: Script shouldn't assume loop is loop0
-	kpartx -a build/l4t-arch.img
+	loop_dev=$(kpartx -av build/l4t-arch.img | grep -oh "\w*loop\w*")
 
-	mkfs.fat -F 32 /dev/mapper/loop0p1
-	mkfs.ext4 /dev/mapper/loop0p2
+	loop1=$(sed -n '1d' ${loop_dev})
+	loop2=$(sed -n '2d' ${loop_dev})
 
-	mount -o loop /dev/mapper/loop0p1 tmp/mnt/boot/
-	mount -o loop /dev/mapper/loop0p2 tmp/mnt/root/
+	mkfs.fat -F 32 /dev/mapper/${loop1}
+	mkfs.ext4 /dev/mapper/${loop2}
+
+	mount -o loop /dev/mapper/${loop1} tmp/mnt/boot/
+	mount -o loop /dev/mapper/${loop2} tmp/mnt/root/
 	
 	cp -pr tmp/arch-bootfs/* tmp/mnt/boot/
 	cp -pr tmp/arch-rootfs/* tmp/mnt/root/

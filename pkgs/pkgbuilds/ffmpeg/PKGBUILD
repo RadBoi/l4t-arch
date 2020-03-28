@@ -1,4 +1,5 @@
 # Maintainer: Your Name <youremail@domain.com>
+pkbase=ffmpeg
 pkgname=switch-ffmpeg
 pkgver=1
 pkgrel=1
@@ -9,25 +10,25 @@ url=""
 license=('GPL')
 depends=(jetson-ffmpeg)
 install=
-source=(git+https://gitlab.com/switchroot/switch-l4t-configs.git)
+source=(git+git://source.ffmpeg.org/ffmpeg.git)
 sha256sums=(SKIP SKIP SKIP)
 noextract=()
 validpgpkeys=()
+_branch=release/4.2
 
 prepare() {
-
+	cd "${pkgbase}"
+	git checkout ${_branch} --depth=1
+	wget https://github.com/jocover/jetson-ffmpeg/raw/master/ffmpeg_nvmpi.patch
+	git apply ffmpeg_nvmpi.patch
 }
 
 build() {
-	git clone git://source.ffmpeg.org/ffmpeg.git -b release/4.2 --depth=1
-	cd ffmpeg
-	wget https://github.com/jocover/jetson-ffmpeg/raw/master/ffmpeg_nvmpi.patch
-	git apply ffmpeg_nvmpi.patch
 	./configure --enable-nvmpi
 	make
-
 }
 
 package() {
-
+	make install
+	ldconfig
 }
