@@ -82,6 +82,12 @@ make_iso(){
 	gzip build/l4t-arch.img
 }
 
+
+if [[ `whoami` != root ]]; then
+	echo hey! run this as root.
+	exit
+fi
+
 cleanup
 setup_base
 make_iso
