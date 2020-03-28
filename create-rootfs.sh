@@ -10,7 +10,7 @@ cleanup(){
 	umount tmp/mnt/boot/
 	umount tmp/mnt/root/
 	kpartx -d build/l4t-arch.img
-	rm -r tmp/
+	rm -rf tmp/
 }
 
 setup_base(){
