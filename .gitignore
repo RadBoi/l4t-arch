@@ -2,3 +2,5 @@ tmp/
 build/
 tarballs/
 pkgs/pkgbuilds/azk*
+bootfs/
+dockerhelper.sh

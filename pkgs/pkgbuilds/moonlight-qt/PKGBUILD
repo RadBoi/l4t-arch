@@ -1,7 +1,7 @@
 # Maintainer: Your Name <youremail@domain.com>
 pkgname=moonlight-qt
 pkgver=1
-pkgrel=1
+pkgrel=1-nx
 epoch=
 pkgdesc=""
 arch=(any)

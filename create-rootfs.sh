@@ -9,21 +9,17 @@ size=6G
 cleanup(){
 	umount tmp/mnt/boot/
 	umount tmp/mnt/root/
+
 	kpartx -d build/l4t-arch.img
+
 	rm -rf tmp/
 }
 
-setup_base(){
-	
+prepare() {
 	mkdir -p tmp/
 	mkdir -p tmp/arch-bootfs/
 	mkdir -p tmp/arch-rootfs/
-
-	### Bootfs Setup
-	
-	
-	###  Rootfs Setup
-	mkdir -p tarballs
+	mkdir -p tarballs/
 
 	if [[ ! -e tarballs/ArchLinuxARM-aarch64-latest.tar.gz ]]; then
 		wget -O tarballs/ArchLinuxARM-aarch64-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
@@ -35,7 +31,15 @@ setup_base(){
 		mv hekate_ctcaer_5.1.3.bin tmp/arch-rootfs/reboot_payload.bin
 		rm hekate_ctcaer_5.1.3_Nyx_0.8.6.zip
 	fi
+}
 
+## TODO: Up to date kernel should be online
+setup_boot(){
+	cp -pr bootfs/* tmp/arch-bootfs/
+	cp -pr rootfs/lib/ tmp/arch-bootfs/usr/
+}
+
+setup_base(){
 	cp pkgs/build-stage2.sh pkgs/base-pkgs pkgs/optional-pkgs tmp/arch-rootfs/
 
 	bsdtar xpf tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C tmp/arch-rootfs/
@@ -45,10 +49,11 @@ setup_base(){
 	SigLevel = Optional
 	Server = https://9net.org/l4t-arch/
 EOF
+
+	setup_boot
 }
 
-make_iso(){
-
+buildiso(){
 	mkdir -p build/
 	mkdir -p tmp/mnt/boot/
 	mkdir -p tmp/mnt/root/
@@ -71,17 +76,11 @@ make_iso(){
 	
 	cp -pr tmp/arch-bootfs/* tmp/mnt/boot/
 	cp -pr tmp/arch-rootfs/* tmp/mnt/root/
-
-	umount tmp/mnt/boot/
-	umount tmp/mnt/root/
-
-	kpartx -d build/l4t-arch.img
-
-	rm -rf tmp/
+	
+	cleanup
 
 	gzip build/l4t-arch.img
 }
-
 
 if [[ `whoami` != root ]]; then
 	echo hey! run this as root.
@@ -89,7 +88,8 @@ if [[ `whoami` != root ]]; then
 fi
 
 cleanup
+prepare
 setup_base
-make_iso
+buildiso
 
 echo "Done!\n"

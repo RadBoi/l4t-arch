@@ -1,8 +1,8 @@
 # Maintainer: Your Name <youremail@domain.com>
 pkbase=ffmpeg
-pkgname=switch-ffmpeg
-pkgver=1
-pkgrel=1
+pkgname=ffmpeg
+pkgver=4
+pkgrel=2-nx
 epoch=
 pkgdesc=""
 arch=(any)

@@ -2,6 +2,8 @@
 
 ## Required
 
+- Min. 8Go Micro SDCard
+
 You'll need `wget`, `bsdtar`and `kpartx` to build the script :
 
 ```sh
