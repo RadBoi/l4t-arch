@@ -48,7 +48,7 @@ package() {
 	mkdir -p $pkgdir/usr/lib/firmware/ $pkgdir/usr/lib/systemd/
 	
 	# Move usr/lib/aarch64-linux-gnu -> usr/lib.
-	# cp -r usr/lib/aarch64-linux-gnu/* $pkgdir/usr/lib/
+	cp -r usr/lib/aarch64-linux-gnu/ $pkgdir/usr/lib/
 	
 	# Same for lib/firmware, lib/systemd.
 	cp -r lib/firmware/* $pkgdir/usr/lib/firmware/
@@ -87,11 +87,11 @@ package() {
 
 	# Add a symlink for the Vulkan ICD.
 	mkdir -p $pkgdir/etc/vulkan/icd.d
-	ln -s /usr/lib/tegra/nvidia_icd.json $pkgdir/etc/vulkan/icd.d/nvidia_icd.json
+	ln -s /usr/lib/aarch64-linux-gnu/tegra/nvidia_icd.json $pkgdir/etc/vulkan/icd.d/nvidia_icd.json
 
 	# And another one for EGL.
 	mkdir -p $pkgdir/usr/share/glvnd/egl_vendor.d
-	ln -s /usr/lib/tegra-egl/nvidia.json $pkgdir/usr/share/glvnd/egl_vendor.d/
+	ln -s /usr/lib/aarch64-linux-gnu/tegra-egl/nvidia.json $pkgdir/usr/share/glvnd/egl_vendor.d/
 	
-	cp $pkgdir/usr/lib/tegra-egl/ld.so.conf $pkgdir/etc/ld.so.conf.d/
+	cp $pkgdir/usr/lib/aarch64-linux-gnu/tegra-egl/ld.so.conf $pkgdir/etc/ld.so.conf.d/
 }
