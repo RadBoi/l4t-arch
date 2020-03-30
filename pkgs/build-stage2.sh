@@ -7,7 +7,7 @@ pacman-key --populate archlinuxarm
 pacman -Syu --noconfirm
 pacman -S xorg-server-tegra --noconfirm # important
 pacman -S switch-configs --noconfirm
-pacman -S tegra-bsp --noconfirm
+#pacman -S tegra-bsp --noconfirm
 pacman -S `cat base-pkgs` --noconfirm
 pacman -S `cat optional-pkgs` --noconfirm
 
@@ -21,5 +21,3 @@ yes | pacman -Scc
 mv /reboot_payload.bin /lib/firmware/
 gpasswd -a alarm audio
 gpasswd -a alarm video
-
-reboot
