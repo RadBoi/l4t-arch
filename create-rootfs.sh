@@ -1,21 +1,12 @@
 #!/bin/bash
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m'
-
 ## TODO: size should be defined dynamically
 size=6G
 
-unmount(){
+cleanup(){
 	umount tmp/mnt/boot/
 	umount tmp/mnt/root/
-	kpartx -d build/l4t-arch.img
-}
-
-cleanup(){
-	unmount
-
-	rm -rf build/
+	kpartx -d l4t-arch.img
+	umount -R tmp/arch-rootfs/
 	rm -rf tmp/
 }
 
@@ -39,13 +30,14 @@ prepare() {
 
 ## TODO: Up to date kernel should be online
 setup_boot(){
-	cp -r bootfs/* tmp/arch-bootfs/
-	cp -pr rootfs/lib/ tmp/arch-bootfs/usr/
+	cp -r kernel/bootfs/* tmp/arch-bootfs/
+	cp -pr kernel/rootfs/lib/ tmp/arch-bootfs/usr/
+	cp -pr kernel/rootfs/firmware/ tmp/arch-rootfs/usr/
 }
 
 setup_base(){
-	cp pkgs/build-stage2.sh pkgs/base-pkgs pkgs/optional-pkgs tmp/arch-rootfs/
-	cp -r pkgs/pkgbuilds/ tmp/arch-rootfs/
+	cp build-stage2.sh base-pkgs tmp/arch-rootfs/
+	cp -r pkgbuilds/ tmp/arch-rootfs/
 	
 	bsdtar xpf tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C tmp/arch-rootfs/
 
@@ -55,21 +47,29 @@ setup_base(){
 	Server = https://9net.org/l4t-arch/
 EOF
 
-	setup_boot
+	echo -e "/dev/mmcblk0p1	/mnt/hos_data	vfat	rw,relatime	0	2\n/boot /mnt/hos_data/l4t-arch/	none	bind	0	0" >> tmp/arch-rootfs/etc/fstab
+
+	cp /usr/bin/qemu-aarch64-static tmp/arch-rootfs/usr/bin/
+	cp /etc/resolv.conf tmp/arch-rootfs/etc/
+	
+	mount --bind tmp/arch-rootfs tmp/arch-rootfs
+
+	arch-chroot tmp/arch-rootfs/ ./build-stage2.sh
+	
+	umount -R tmp/arch-rootfs/
 }
 
 buildiso(){
-	mkdir -p build/
 	mkdir -p tmp/mnt/boot/
 	mkdir -p tmp/mnt/root/
 
-	dd if=/dev/zero of=build/l4t-arch.img bs=1 count=0 seek=$size
+	dd if=/dev/zero of=l4t-arch.img bs=1 count=0 seek=$size
 	
-	parted build/l4t-arch.img --script -- mklabel msdos
-	parted -a optimal build/l4t-arch.img mkpart primary 0% 476MB
-	parted -a optimal build/l4t-arch.img mkpart primary 477MB 100%
+	parted l4t-arch.img --script -- mklabel msdos
+	parted -a optimal l4t-arch.img mkpart primary 0% 476MB
+	parted -a optimal l4t-arch.img mkpart primary 477MB 100%
 
-	loop_dev=$(kpartx -av build/l4t-arch.img | grep -oh "\w*loop\w*")
+	loop_dev=$(kpartx -av l4t-arch.img | grep -oh "\w*loop\w*")
 
 	loop1=`echo "${loop_dev}" | head -1`
 	loop2=`echo "${loop_dev}" | tail -1`
@@ -82,15 +82,6 @@ buildiso(){
 	
 	cp -r tmp/arch-bootfs/* tmp/mnt/boot/
 	cp -pr tmp/arch-rootfs/* tmp/mnt/root/
-	
-	umount tmp/mnt/boot/
-	umount tmp/mnt/root/
-	kpartx -d build/l4t-arch.img
-	
-	mv build/l4t-arch.img .
-
-	cleanup
-	unmount
 }
 
 if [[ `whoami` != root ]]; then
@@ -101,6 +92,8 @@ fi
 cleanup
 prepare
 setup_base
+setup_boot
 buildiso
+cleanup
 
 echo "Done!\n"

@@ -7,3 +7,7 @@ dialog
 pulseaudio
 pulseaudio-alsa
 bluez
+sudo
+lxde
+lightdm
+lightdm-gtk-greeter
