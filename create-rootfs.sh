@@ -1,6 +1,4 @@
 #!/bin/bash
-## TODO: size should be defined dynamically
-size=6G
 
 cleanup(){
 	umount tmp/mnt/boot/
@@ -21,7 +19,7 @@ prepare() {
 	fi
 
 	if [[ ! -e tmp/arch-rootfs/reboot_payload.bin ]]; then
-		wget -O tmp/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip https://github.com/CTCaer/hekate/releases/download/v5.1.3/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip
+		wget https://github.com/CTCaer/hekate/releases/download/v5.1.3/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip -P tmp/
 		unzip tmp/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip hekate_ctcaer_5.1.3.bin
 		mv hekate_ctcaer_5.1.3.bin tmp/arch-rootfs/reboot_payload.bin
 		rm tmp/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip
@@ -31,7 +29,7 @@ prepare() {
 ## TODO: Up to date kernel should be online
 setup_boot(){
 	cp -r kernel/bootfs/* tmp/arch-bootfs/
-	cp -pr kernel/rootfs/lib/ tmp/arch-bootfs/usr/
+	cp -pdr kernel/rootfs/lib/ tmp/arch-bootfs/usr/
 }
 
 setup_base(){
@@ -52,22 +50,22 @@ EOF
 	cp /etc/resolv.conf tmp/arch-rootfs/etc/
 	
 	mount --bind tmp/arch-rootfs tmp/arch-rootfs
-
 	arch-chroot tmp/arch-rootfs/ ./build-stage2.sh
-	
+	arch-chroot tmp/arch-rootfs/
 	umount -R tmp/arch-rootfs/
 }
 
 buildiso(){
-	mkdir -p tmp/mnt/boot/
 	mkdir -p tmp/mnt/root/
+
+	size=$(du -hs tmp/fedora-rootfs/ | head -n1 | awk '{print int($1+1);}')$(du -hs tmp/fedora-rootfs/ | head -n1 | awk '{print $1;}' | grep -o '[[:alpha:]]')
 
 	dd if=/dev/zero of=l4t-arch.img bs=1 count=0 seek=$size
 	
 	parted l4t-arch.img --script -- mklabel msdos
 	parted -a optimal l4t-arch.img mkpart primary 0% 476MB
 	parted -a optimal l4t-arch.img mkpart primary 477MB 100%
-
+	
 	loop_dev=$(kpartx -av l4t-arch.img | grep -oh "\w*loop\w*")
 
 	loop1=`echo "${loop_dev}" | head -1`
@@ -80,7 +78,7 @@ buildiso(){
 	mount -o loop /dev/mapper/${loop2} tmp/mnt/root/
 	
 	cp -r tmp/arch-bootfs/* tmp/mnt/boot/
-	cp -pr tmp/arch-rootfs/* tmp/mnt/root/
+	cp -pdr tmp/arch-rootfs/* tmp/mnt/root/
 }
 
 if [[ `whoami` != root ]]; then

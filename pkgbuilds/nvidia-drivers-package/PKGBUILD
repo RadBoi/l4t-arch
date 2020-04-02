@@ -2,7 +2,6 @@
 pkgname=tegra-bsp
 pkgver=r32
 pkgrel=3.1
-#epoch=
 pkgdesc="just literal shit"
 arch=(any)
 url="nvidia.com"
@@ -22,9 +21,6 @@ prepare() {
 build() {
 	tar xvf Linux_for_Tegra/nv_tegra/nvidia_drivers.tbz2
 	tar xvf Linux_for_Tegra/nv_tegra/config.tbz2
-
-	#ar x Linux_for_Tegra/nv_tegra/nvidia-l4t-3d-core_32.2.0-20190716172031_arm64.deb
-	#tar xf data.tar.xz
 }
 
 package() {
@@ -33,39 +29,39 @@ package() {
 	mkdir -p $pkgdir/etc/systemd/system
 
 	# sed -e 's_/usr/lib/aarch64-linux-gnu_/usr/lib_' -i etc/nv_tegra_release
-	cp -r etc/nv_tegra_release $pkgdir/etc/nv_tegra_release
-	cp -r etc/ld.so.conf.d $pkgdir/etc/ld.so.conf.d
+	cp -pdr etc/nv_tegra_release $pkgdir/etc/nv_tegra_release
+	cp -pdr etc/ld.so.conf.d $pkgdir/etc/ld.so.conf.d
 
-	cp etc/systemd/nv* $pkgdir/etc/systemd/
-	cp etc/systemd/system/nv*service $pkgdir/etc/systemd/system/
-	cp etc/asound.conf.* $pkgdir/etc/
+	cp -d etc/systemd/nv* $pkgdir/etc/systemd/
+	cp -d etc/systemd/system/nv*service $pkgdir/etc/systemd/system/
+	cp -d etc/asound.conf.* $pkgdir/etc/
 	
 	# Get the udev rules & xorg config.
-	cp -r etc/udev/ $pkgdir/etc/udev
+	cp -pdr etc/udev/ $pkgdir/etc/udev
 	mkdir $pkgdir/etc/X11
-	cp -r etc/X11/xorg.conf $pkgdir/etc/X11/
+	cp -pdr etc/X11/xorg.conf $pkgdir/etc/X11/
 
 	mkdir -p $pkgdir/usr/lib/firmware/ $pkgdir/usr/lib/systemd/
 	
 	# Move usr/lib/aarch64-linux-gnu -> usr/lib.
-	cp -r usr/lib/aarch64-linux-gnu/ $pkgdir/usr/lib/
+	cp -pdr usr/lib/aarch64-linux-gnu/ $pkgdir/usr/lib/
 	
 	# Same for lib/firmware, lib/systemd.
-	cp -r lib/firmware/* $pkgdir/usr/lib/firmware/
-	cp -r lib/systemd/* $pkgdir/usr/lib/systemd/
+	cp -pdr lib/firmware/* $pkgdir/usr/lib/firmware/
+	cp -pdr lib/systemd/* $pkgdir/usr/lib/systemd/
 
 	# Pass through these 2 in usr/lib.
-	cp -r usr/lib/xorg $pkgdir/usr/lib/xorg/
-	cp -r usr/lib/nvidia $pkgdir/usr/lib/nvidia/
+	cp -pdr usr/lib/xorg $pkgdir/usr/lib/xorg/
+	cp -pdr usr/lib/nvidia $pkgdir/usr/lib/nvidia/
 	
 	# These are OK as well...
-	cp -r usr/share $pkgdir/usr/share/
-	cp -r usr/bin $pkgdir/usr/bin/
+	cp -pdr usr/share $pkgdir/usr/share/
+	cp -pdr usr/bin $pkgdir/usr/bin/
 	# move sbin -> bin
-	cp -r usr/sbin/* $pkgdir/usr/bin/
+	cp -pdr usr/sbin/* $pkgdir/usr/bin/
 	# pass through
-	cp -r var/ $pkgdir/var/
-	cp -r opt/ $pkgdir/opt/ 
+	cp -pdr var/ $pkgdir/var/
+	cp -pdr opt/ $pkgdir/opt/ 
 
 	[[ ! -d $pkgdir/usr/lib/firmware/gm20b ]] && mkdir $pkgdir/usr/lib/firmware/gm20b
 	pushd $pkgdir/usr/lib/firmware/gm20b > /dev/null 2>&1
@@ -93,5 +89,5 @@ package() {
 	mkdir -p $pkgdir/usr/share/glvnd/egl_vendor.d
 	ln -s /usr/lib/aarch64-linux-gnu/tegra-egl/nvidia.json $pkgdir/usr/share/glvnd/egl_vendor.d/
 	
-	cp $pkgdir/usr/lib/aarch64-linux-gnu/tegra-egl/ld.so.conf $pkgdir/etc/ld.so.conf.d/
+	cp -d $pkgdir/usr/lib/aarch64-linux-gnu/tegra-egl/ld.so.conf $pkgdir/etc/ld.so.conf.d/
 }
