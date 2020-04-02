@@ -32,7 +32,6 @@ prepare() {
 setup_boot(){
 	cp -r kernel/bootfs/* tmp/arch-bootfs/
 	cp -pr kernel/rootfs/lib/ tmp/arch-bootfs/usr/
-	cp -pr kernel/rootfs/firmware/ tmp/arch-rootfs/usr/
 }
 
 setup_base(){
