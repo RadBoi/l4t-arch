@@ -39,14 +39,12 @@ setup_rootfs(){
 	
 	bsdtar xpf ${root_dir}/tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C ${root_dir}/tmp/arch-rootfs/
 
-	cat << EOF >> ${root_dir}/tmp/arch-rootfs/etc/pacman.conf
-	[switch]
+	echo "[switch]
 	SigLevel = Optional
 	Server = https://9net.org/l4t-arch/
 	[switch-preview]
 	SigLevel = Optional
-	Server = https://9net.org/~stary/preview-pkgs/
-EOF
+	Server = https://9net.org/~stary/preview-pkgs/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.conf
 
 	echo -e "/dev/mmcblk0p1	/mnt/hos_data	vfat	rw,relatime	0	2\n/boot /mnt/hos_data/l4t-arch/	none	bind	0	0" >> ${root_dir}/tmp/arch-rootfs/etc/fstab
 
