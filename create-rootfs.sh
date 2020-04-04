@@ -1,18 +1,18 @@
 #!/bin/bash
 
 cleanup(){
-	umount tmp/mnt/boot/
-	umount tmp/mnt/root/
+	umount -R tmp/mnt/*
+	umount -R tmp/*
 	kpartx -d l4t-arch.img
-	umount -R tmp/arch-rootfs/
 	rm -rf tmp/
 }
 
 prepare() {
-	mkdir -p tmp/
+	mkdir -p tarballs/
 	mkdir -p tmp/arch-bootfs/
 	mkdir -p tmp/arch-rootfs/
-	mkdir -p tarballs/
+	mkdir -p tmp/mnt/bootfs/
+	mkdir -p tmp/mnt/rootfs/
 
 	if [[ ! -e tarballs/ArchLinuxARM-aarch64-latest.tar.gz ]]; then
 		wget -O tarballs/ArchLinuxARM-aarch64-latest.tar.gz http://os.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
@@ -27,12 +27,12 @@ prepare() {
 }
 
 ## TODO: Up to date kernel should be online
-setup_boot(){
+setup_bootfs(){
 	cp -r kernel/bootfs/* tmp/arch-bootfs/
-	cp -pdr kernel/rootfs/lib/ tmp/arch-bootfs/usr/
+	# cp -pdr kernel/rootfs/lib/ tmp/arch-rootfs/usr/
 }
 
-setup_base(){
+setup_rootfs(){
 	cp build-stage2.sh base-pkgs tmp/arch-rootfs/
 	cp -r pkgbuilds/ tmp/arch-rootfs/
 	
@@ -42,6 +42,9 @@ setup_base(){
 	[switch]
 	SigLevel = Optional
 	Server = https://9net.org/l4t-arch/
+	[switch-preview]
+	SigLevel = Optional
+	Server = https://9net.org/~stary/preview-pkgs/
 EOF
 
 	echo -e "/dev/mmcblk0p1	/mnt/hos_data	vfat	rw,relatime	0	2\n/boot /mnt/hos_data/l4t-arch/	none	bind	0	0" >> tmp/arch-rootfs/etc/fstab
@@ -51,14 +54,15 @@ EOF
 	
 	mount --bind tmp/arch-rootfs tmp/arch-rootfs
 	arch-chroot tmp/arch-rootfs/ ./build-stage2.sh
-	arch-chroot tmp/arch-rootfs/
 	umount -R tmp/arch-rootfs/
+
+	rm tmp/fedora-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
+	rm -rf tmp/arch-rootfs/{pkgbuilds,build-stage2.sh}
+	rm tmp/arch-rootfs/usr/bin/qemu-aarch64-static
 }
 
 buildiso(){
-	mkdir -p tmp/mnt/root/
-
-	size=$(du -hs tmp/fedora-rootfs/ | head -n1 | awk '{print int($1+1);}')$(du -hs tmp/fedora-rootfs/ | head -n1 | awk '{print $1;}' | grep -o '[[:alpha:]]')
+	size=$(du -hs tmp/arch-rootfs/ | head -n1 | awk '{print int($1+2);}')$(du -hs tmp/arch-rootfs/ | head -n1 | awk '{print $1;}' | grep -o '[[:alpha:]]')
 
 	dd if=/dev/zero of=l4t-arch.img bs=1 count=0 seek=$size
 	
@@ -74,11 +78,11 @@ buildiso(){
 	mkfs.fat -F 32 /dev/mapper/${loop1}
 	mkfs.ext4 /dev/mapper/${loop2}
 
-	mount -o loop /dev/mapper/${loop1} tmp/mnt/boot/
-	mount -o loop /dev/mapper/${loop2} tmp/mnt/root/
+	mount -o loop /dev/mapper/${loop1} tmp/mnt/bootfs/
+	mount -o loop /dev/mapper/${loop2} tmp/mnt/rootfs/
 	
-	cp -r tmp/arch-bootfs/* tmp/mnt/boot/
-	cp -pdr tmp/arch-rootfs/* tmp/mnt/root/
+	cp -r tmp/arch-bootfs/* tmp/mnt/bootfs/
+	cp -pdr tmp/arch-rootfs/* tmp/mnt/rootfs/
 }
 
 if [[ `whoami` != root ]]; then
@@ -88,8 +92,8 @@ fi
 
 cleanup
 prepare
-setup_base
-setup_boot
+setup_bootfs
+setup_rootfs
 buildiso
 cleanup
 
