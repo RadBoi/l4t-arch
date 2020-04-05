@@ -14,4 +14,3 @@ lightdm-gtk-greeter
 alsa-utils
 joycond-git
 netctl
-dhcpcd

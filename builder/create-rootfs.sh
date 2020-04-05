@@ -44,13 +44,13 @@ Server = https://9net.org/l4t-arch/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.c
 	cp /etc/resolv.conf ${root_dir}/tmp/arch-rootfs/etc/
 	
 	mount --bind ${root_dir}/tmp/arch-rootfs ${root_dir}/tmp/arch-rootfs
-	mount --bind ${root_dir}/tmp/arch-bootfs ${root_dir}/tmp/arch-rootfs/boot/
+	mount ${root_dir}/tmp/arch-bootfs ${root_dir}/tmp/arch-rootfs/boot/
 	arch-chroot ${root_dir}/tmp/arch-rootfs/ ./build-stage2.sh
 	umount -R ${root_dir}/tmp/arch-rootfs/boot/
 	umount -R ${root_dir}/tmp/arch-rootfs/
 
-	rm ${root_dir}/tmp/fedora-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
-	rm -rf ${root_dir}/tmp/arch-rootfs/{pkgbuilds,build-stage2.sh}
+	rm ${root_dir}/tmp/arch-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
+	rm -rf ${root_dir}/tmp/arch-rootfs/{pkgbuilds,build-stage2.sh,pkgs}
 	rm ${root_dir}/tmp/arch-rootfs/usr/bin/qemu-aarch64-static
 }
 
