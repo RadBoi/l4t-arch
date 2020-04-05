@@ -25,3 +25,5 @@ yes | pacman -Scc
 mv /reboot_payload.bin /lib/firmware/
 gpasswd -a alarm audio
 gpasswd -a alarm video
+
+ldconfig
