@@ -13,7 +13,7 @@ do
 	echo "Error check your build or let the script retry last cmd"
 done
 
-pacman -U /pkgs/tegra-bsp-r32-1-any.pkg.tar.xz /pkgs/switch-boot-files-bin-r32-1-any.pkg.tar.xz
+pacman -U /pkgs/tegra-bsp-r32-1-any.pkg.tar.xz /pkgs/switch-boot-files-bin-r32-1-any.pkg.tar.xz --noconfirm
 
 systemctl enable r2p
 systemctl enable bluetooth
