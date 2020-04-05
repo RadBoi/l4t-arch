@@ -61,7 +61,7 @@ buildiso(){
 	
 	parted ${root_dir}/l4t-arch.img --script -- mklabel msdos
 	parted -a optimal ${root_dir}/l4t-arch.img mkpart primary 0% 476MB
-	parted -a optimal ${root_dir}/l4t-arch.img mkpart primary 477MB 100%
+	parted -a optimal ${root_dir}/l4t-arch.img mkpart primary 476MB 100%
 	
 	loop_dev=$(kpartx -av ${root_dir}/l4t-arch.img | grep -oh "\w*loop\w*")
 
