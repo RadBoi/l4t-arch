@@ -17,7 +17,7 @@ sha256sums=('SKIP')
 conflicts=(tegra-drivers)
 
 prepare() {
-        mkdir -p "$pkgname-$pkgver"
+    mkdir -p "$pkgname-$pkgver"
 }
 
 build() {

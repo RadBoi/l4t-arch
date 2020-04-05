@@ -12,7 +12,7 @@ cleanup(){
 prepare() {
 	mkdir -p ${root_dir}/tarballs/
 	mkdir -p ${root_dir}/tmp/arch-bootfs/
-	mkdir -p ${root_dir}/tmp/arch-rootfs/
+	mkdir -p ${root_dir}/tmp/arch-rootfs/pkgs
 	mkdir -p ${root_dir}/tmp/mnt/bootfs/
 	mkdir -p ${root_dir}/tmp/mnt/rootfs/
 
@@ -28,23 +28,15 @@ prepare() {
 	fi
 }
 
-setup_bootfs(){
-	cp -r ${root_dir}/kernel/bootfs/* ${root_dir}/tmp/arch-bootfs/
-	cp -pdr ${root_dir}/kernel/rootfs/lib/modules/* ${root_dir}/tmp/arch-rootfs/usr/lib/modules
-}
-
-setup_rootfs(){
-	cp build-stage2.sh base-pkgs ${root_dir}/tmp/arch-rootfs/
-	cp -r ${root_dir}/pkgbuilds/ ${root_dir}/tmp/arch-rootfs/
+setup_base(){
+	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/builder/base-pkgs ${root_dir}/tmp/arch-rootfs/
+	cp -r ${root_dir}/pkgbuilds/*.tar.xz ${root_dir}/tmp/arch-rootfs/pkgs/
 	
 	bsdtar xpf ${root_dir}/tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C ${root_dir}/tmp/arch-rootfs/
 
 	echo "[switch]
-	SigLevel = Optional
-	Server = https://9net.org/l4t-arch/
-	[switch-preview]
-	SigLevel = Optional
-	Server = https://9net.org/~stary/preview-pkgs/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.conf
+SigLevel = Optional
+Server = https://9net.org/l4t-arch/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.conf
 
 	echo -e "/dev/mmcblk0p1	/mnt/hos_data	vfat	rw,relatime	0	2\n/boot /mnt/hos_data/l4t-arch/	none	bind	0	0" >> ${root_dir}/tmp/arch-rootfs/etc/fstab
 
@@ -52,7 +44,9 @@ setup_rootfs(){
 	cp /etc/resolv.conf ${root_dir}/tmp/arch-rootfs/etc/
 	
 	mount --bind ${root_dir}/tmp/arch-rootfs ${root_dir}/tmp/arch-rootfs
+	mount --bind ${root_dir}/tmp/arch-bootfs ${root_dir}/tmp/arch-rootfs/boot/
 	arch-chroot ${root_dir}/tmp/arch-rootfs/ ./build-stage2.sh
+	umount -R ${root_dir}/tmp/arch-rootfs/boot/
 	umount -R ${root_dir}/tmp/arch-rootfs/
 
 	rm ${root_dir}/tmp/fedora-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
@@ -91,8 +85,7 @@ fi
 
 cleanup
 prepare
-setup_rootfs
-setup_bootfs
+setup_base
 buildiso
 cleanup
 
