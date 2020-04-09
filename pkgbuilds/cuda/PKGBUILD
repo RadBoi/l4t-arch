@@ -6,7 +6,7 @@ pkgrel=3.1
 arch=('aarch64')
 license=('GPL')
 url="http://nvidia.com"
-source=(https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_${pkgbase}.${pkgver}_aarch64.tbz2)
+source=(https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_${pkgver}.${pkgrel}_aarch64.tbz2)
 sha256sums=('SKIP')
 makedepends=('binutils')
 
