@@ -7,11 +7,7 @@ pacman-key --populate archlinuxarm
 # we won't be needing this
 pacman -R linux-aarch64 --noconfirm
 
-until pacman -Syu systemd-suspend-modules xorg-server-tegra switch-configs `cat base-pkgs` --noconfirm
-# until pacman -Syu switch-boot-files-bin systemd-suspend-modules xorg-server-tegra switch-configs tegra-bsp linux-tegra gcc7 `cat base-pkgs` --noconfirm
-do
-	echo "Error check your build or let the script retry last cmd"
-done
+pacman -Syu switch-boot-files-bin systemd-suspend-modules xorg-server-tegra tegra-bsp switch-configs `cat base-pkgs` --noconfirm #  linux-tegra gcc7 --noconfirm
 
 for pkg in `find /pkgs/*.pkg.* -type f`; do
 	pacman -U $pkg --noconfirm
