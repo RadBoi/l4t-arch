@@ -5,26 +5,27 @@ pkgrel=3.1
 arch=('aarch64')
 license=('GPL')
 url="https://github.com/jocover/jetson-ffmpeg"
-source=("https://github.com/jocover/jetson-ffmpeg")
 sha256sums=('SKIP')
+makedepends=('git', 'cmake')
+depends=('tegra-bsp', 'v4l-utils')
 
 prepare() {
-	git clone https://github.com/jocover/jetson-ffmpeg.git
-	mkdir jetson-ffmpeg/build
+	git clone https://github.com/jocover/jetson-ffmpeg.git "${pkgbase}-${pkgver}"
+	mkdir -p "${pkgbase}-${pkgver}"/build/
 }
 
 build() {
-	cd jetson-ffmpeg/build
+	cd "${pkgbase}-${pkgver}"/build
 	cmake ..
 	make
 }
 
-package_jetson-ffmpeg() {
-	cd jetson-ffmpeg/build
-	# make install
-	install -m755 libnvmpi.so.1.0.0 ${pkgdir}/usr/lib/libnvmpi.so.1.0.0
-	install -m755 libnvmpi.so ${pkgdir}/usr/lib/libnvmpi.so
-	install -m755 ../nvmpi.h ${pkgdir}/usr/include/nvmpi.h
-	install -m755 nvmpi.pc ${pkgdir}/usr/share/pkgconfig/nvmpi.pc
-	ldconfig
+package() {
+	cd "${pkgbase}-${pkgver}"/build
+	mkdir -p ${pkgdir}/usr/{lib,include,share}/
+	mkdir -p ${pkgdir}/usr/share/pkgconfig/
+	install -m755 ${srcdir}/"${pkgbase}-${pkgver}"/build/libnvmpi.so.1.0.0 ${pkgdir}/usr/lib/
+	install -m755 ${srcdir}/"${pkgbase}-${pkgver}"/build/libnvmpi.so ${pkgdir}/usr/lib/
+	install -m755 ${srcdir}/"${pkgbase}-${pkgver}"/nvmpi.h ${pkgdir}/usr/include/
+	install -m755 ${srcdir}/"${pkgbase}-${pkgver}"/build/nvmpi.pc ${pkgdir}/usr/share/pkgconfig/
 }
