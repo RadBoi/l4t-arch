@@ -22,6 +22,9 @@ build() {
 
 package_jetson-ffmpeg() {
 	cd jetson-ffmpeg/build
-	install -m
+	install -m755 libnvmpi.so.1.0.0 ${pkgdir}/usr/lib/libnvmpi.so.1.0.0
+	install -m755 libnvmpi.so ${pkgdir}/usr/lib/libnvmpi.so
+	install -m755 ../nvmpi.h ${pkgdir}/usr/include/nvmpi.h
+	install -m755 nvmpi.pc ${pkgdir}/usr/share/pkgconfig/nvmpi.pc
 	ldconfig
 }

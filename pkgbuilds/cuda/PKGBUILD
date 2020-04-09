@@ -12,8 +12,9 @@ makedepends=('binutils')
 
 prepare() {
   mkdir -p "$pkgname-$pkgver"
-  cd "$pkgname-$pkgver"
-  
+}
+
+build() {
   mv Linux_for_Tegra/nv_tegra/l4t_deb_packages/ .
   for file in l4t_deb_packages/*.deb; do
     fn="$(awk 'END{ var=FILENAME; n=split (var,a,/\//); print a[n]}' ${file})"
