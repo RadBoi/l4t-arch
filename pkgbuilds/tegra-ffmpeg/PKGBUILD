@@ -1,4 +1,3 @@
-# Maintainer: Azkali Manad <jgc@archlinux.org>
 pkgname=tegra-ffmpeg
 pkgbase=tegra-ffmpeg
 pkgver=R32
