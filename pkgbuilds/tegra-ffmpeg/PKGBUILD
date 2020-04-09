@@ -5,9 +5,8 @@ pkgrel=3.1
 arch=('aarch64')
 license=('GPL')
 url="https://ffmpeg.org/"
-source=("https://://source.ffmpeg.org/ffmpeg.git")
-sha256sums=('SKIP')
-depends=('jetson-ffmpeg')
+makedepends=('git')
+depends=('jetson-ffmpeg', 'tegra-bsp', 'v4l-utils')
 
 prepare() {
 	git clone git://source.ffmpeg.org/ffmpeg.git -b release/4.2 --depth=1
@@ -19,11 +18,10 @@ prepare() {
 
 build() {
 	cd ffmpeg/
-	make
+	make -j$(nproc)
 }
 
-package_tegra-ffmpeg() {
-	cd ffmpeg/
-	make install
-	ldconfig
+package() {
+	cd ${srcdir}/ffmpeg/
+	make DESTDIR="${pkgdir}" install
 }
