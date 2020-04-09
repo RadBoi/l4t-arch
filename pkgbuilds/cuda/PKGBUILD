@@ -1,0 +1,42 @@
+# Maintainer: Azkali Manad <>
+pkgname=cuda
+pkgbase=cuda
+pkgver=R32
+pkgrel=3.1
+arch=('aarch64')
+license=('GPL')
+url="http://nvidia.com"
+source=(https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_${pkgbase}.${pkgver}_aarch64.tbz2)
+sha256sums=('SKIP')
+makedepends=('binutils')
+
+prepare() {
+  mkdir -p "$pkgname-$pkgver"
+  cd "$pkgname-$pkgver"
+  
+  mv Linux_for_Tegra/nv_tegra/l4t_deb_packages/ .
+  for file in l4t_deb_packages/*.deb; do
+    fn="$(awk 'END{ var=FILENAME; n=split (var,a,/\//); print a[n]}' ${file})"
+    dir=$(echo ${fn} | cut -d _ -f1)
+    mkdir -p l4t_deb_packages/"${dir}"
+    if [[ "${file}" =~ "${dir}" ]]; then
+      mv "${file}" l4t_deb_packages/"${dir}"/
+    fi
+  done
+}
+
+package() {
+  for dir in l4t_deb_packages/; do
+    cd l4t_deb_packages/"${dir}"
+    ar x *.deb 
+    for f in *.tar*; do tar xf "$f"; done
+    rm *
+    cp -pr * ../
+    cd ../../
+    rm -rf l4t_deb_packages/"${dir}"
+  done
+
+  cp -pr l4t_deb_packages/lib l4t_deb_packages/usr/
+  rm -rf l4t_deb_packages/lib/
+  cp -pr * ${pkgdir}
+}

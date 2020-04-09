@@ -1,0 +1,27 @@
+# Maintainer: Azkali Manad <jgc@archlinux.org>
+pkgname=jetson-ffmpeg
+pkgbase=jetson-ffmpeg
+pkgver=R32
+pkgrel=3.1
+arch=('aarch64')
+license=('GPL')
+url="https://github.com/jocover/jetson-ffmpeg"
+source=("https://github.com/jocover/jetson-ffmpeg")
+sha256sums=('SKIP')
+
+prepare() {
+	git clone https://github.com/jocover/jetson-ffmpeg.git
+	mkdir jetson-ffmpeg/build
+}
+
+build() {
+	cd jetson-ffmpeg/build
+	cmake ..
+	make
+}
+
+package_jetson-ffmpeg() {
+	cd jetson-ffmpeg/build
+	install -m
+	ldconfig
+}
