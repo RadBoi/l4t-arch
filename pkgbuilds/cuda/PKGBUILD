@@ -1,4 +1,3 @@
-# Maintainer: Azkali Manad <>
 pkgname=cuda
 pkgbase=cuda
 pkgver=R32
@@ -28,13 +27,13 @@ build() {
 
 package() {
   for dir in l4t_deb_packages/; do
-    cd l4t_deb_packages/"${dir}"
+    cd "${dir}"
     ar x *.deb 
     for f in *.tar*; do tar xf "$f"; done
     rm *
     cp -pr * ../
     cd ../../
-    rm -rf l4t_deb_packages/"${dir}"
+    rm -rf "${dir}"
   done
 
   cp -pr l4t_deb_packages/lib l4t_deb_packages/usr/
