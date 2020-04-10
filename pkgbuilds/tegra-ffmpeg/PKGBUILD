@@ -6,14 +6,14 @@ arch=('aarch64')
 license=('GPL')
 url="https://ffmpeg.org/"
 makedepends=('git')
-depends=('jetson-ffmpeg', 'tegra-bsp', 'v4l-utils')
+depends=('jetson-ffmpeg' 'tegra-bsp' 'v4l-utils')
 
 prepare() {
 	git clone git://source.ffmpeg.org/ffmpeg.git -b release/4.2 --depth=1
 	cd ffmpeg/
 	wget https://github.com/jocover/jetson-ffmpeg/raw/master/ffmpeg_nvmpi.patch
 	git apply ffmpeg_nvmpi.patch
-	./configure --enable-nvmpi
+	./configure --enable-nvmpi --prefix=/usr
 }
 
 build() {
