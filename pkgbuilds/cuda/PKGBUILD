@@ -33,5 +33,6 @@ package() {
     cd ../../
     rm -rf "${dir}"
   done
+  rm -r ${srcdir}/etc/{apt,ld.so.conf.d,vulkan} ${srcdir}/boot/
   cp -pr ${srcdir}/* ${pkgdir}
 }
