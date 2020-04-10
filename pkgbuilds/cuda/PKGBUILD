@@ -10,23 +10,21 @@ sha256sums=('SKIP')
 makedepends=('binutils')
 
 prepare() {
-  mkdir -p "$pkgname-$pkgver"
-}
-
-build() {
-  mv Linux_for_Tegra/nv_tegra/l4t_deb_packages/ .
-  for file in l4t_deb_packages/*.deb; do
+  mv Linux_for_Tegra/nv_tegra/l4t_deb_packages/* .
+  for file in ./*.deb; do
     fn="$(awk 'END{ var=FILENAME; n=split (var,a,/\//); print a[n]}' ${file})"
     dir=$(echo ${fn} | cut -d _ -f1)
-    mkdir -p l4t_deb_packages/"${dir}"
+    mkdir -p "${dir}"
     if [[ "${file}" =~ "${dir}" ]]; then
-      mv "${file}" l4t_deb_packages/"${dir}"/
+      mv "${file}" "${dir}"/
     fi
   done
+  rm -r Linux_for_Tegra
+  rm Tegra210_Linux_${pkgver}.${pkgrel}_aarch64.tbz2
 }
 
 package() {
-  for dir in l4t_deb_packages/*; do
+  for dir in ${srcdir}/*; do
     cd "${dir}"
     ar x *.deb 
     for f in *.tar*; do tar xf "$f"; done
@@ -35,8 +33,5 @@ package() {
     cd ../../
     rm -rf "${dir}"
   done
-
-  cp -pr l4t_deb_packages/lib l4t_deb_packages/usr/
-  rm -rf l4t_deb_packages/lib/
-  cp -pr * ${pkgdir}
+  cp -pr ${srcdir}/* ${pkgdir}
 }
