@@ -96,7 +96,7 @@ Server = https://9net.org/l4t-arch/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.c
 }
 
 buildimg(){
-	size="$(du -hs --block-size=1G ${root_dir}/tmp/arch-rootfs/ | awk '{print $1;}')"G
+	size="$(($(du -hs --block-size=1G ${root_dir}/tmp/arch-rootfs/ | awk '{print $1;}')+1))"G
 
 	rm ${root_dir}/l4t-arch.img
 	dd if=/dev/zero of=${root_dir}/l4t-arch.img bs=1 count=0 seek=$size
