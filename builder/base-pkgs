@@ -8,7 +8,7 @@ pulseaudio
 pulseaudio-alsa
 bluez
 sudo
-plasma-desktop
+plasma
 kde-applications
 lightdm
 lightdm-gtk-greeter
