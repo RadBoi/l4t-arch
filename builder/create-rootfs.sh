@@ -90,13 +90,12 @@ Server = https://9net.org/l4t-arch/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.c
 	umount -R ${root_dir}/tmp/arch-rootfs/boot/
 	umount -R ${root_dir}/tmp/arch-rootfs/
 
-	rm ${root_dir}/tmp/arch-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
-	rm -rf ${root_dir}/tmp/arch-rootfs/{pkgbuilds,build-stage2.sh,pkgs}
-	rm ${root_dir}/tmp/arch-rootfs/usr/bin/qemu-aarch64-static
+	rm ${root_dir}/tmp/arch-rootfs/etc/pacman.d/gnupg/S.gpg-agent* ${root_dir}/tmp/arch-rootfs/usr/bin/qemu-aarch64-static
+	rm -rf ${root_dir}/tmp/arch-rootfs/{build-stage2.sh,pkgs}
 }
 
 buildimg(){
-	size=$(du -hs ${root_dir}/tmp/arch-rootfs/ | head -n1 | awk '{print int($1+2);}')$(du -hs ${root_dir}/tmp/arch-rootfs/ | head -n1 | awk '{print $1;}' | grep -o '[[:alpha:]]')
+	size="$(du -hs --block-size=1G ${root_dir}/tmp/arch-rootfs/ | awk '{print $1;}')"G
 
 	rm ${root_dir}/l4t-arch.img
 	dd if=/dev/zero of=${root_dir}/l4t-arch.img bs=1 count=0 seek=$size
