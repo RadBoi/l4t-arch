@@ -68,6 +68,7 @@ setup_base(){
 	if [[ $staging == "yes" ]]; then
 		cp -r ${root_dir}/pkgbuilds/*/*.pkg.* ${root_dir}/tmp/arch-rootfs/pkgs/
 		cp -r ${root_dir}/pkgbuilds/nvidia-l4t/nvidia-l4t-*/*.pkg.* ${root_dir}/tmp/arch-rootfs/pkgs/
+		cp ${root_dir}/kernel-modules.tar.gz ${root_dir}/tmp/arch-rootfs
 	fi
 	
 	bsdtar xpf ${root_dir}/tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C ${root_dir}/tmp/arch-rootfs/
