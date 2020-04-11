@@ -1,7 +1,6 @@
 builder/build
 builder/tarballs
-builder/arch.tar
 builder/reboot_payload.bin
-kernel/
 tarballs/
-pkgbuilds/*/*.tar.xz
+*.tar.xz
+*.gz
