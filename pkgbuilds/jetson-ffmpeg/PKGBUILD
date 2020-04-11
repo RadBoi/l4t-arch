@@ -5,7 +5,6 @@ pkgrel=3.1
 arch=('aarch64')
 license=('GPL')
 url="https://github.com/jocover/jetson-ffmpeg"
-sha256sums=('SKIP')
 makedepends=('git' 'cmake')
 depends=('tegra-bsp' 'v4l-utils')
 
