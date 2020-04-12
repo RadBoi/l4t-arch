@@ -2,14 +2,14 @@ pkgname=moonlight-qt
 pkgbase=moonlight-qt
 pkgver=R32
 pkgrel=3.1
-arch=('noarch')
+arch=('any')
 license=('GPL')
-url="https://ffmpeg.org/"
-makedepends=(
+url="https://github.com/moonlight-stream/moonlight-qt"
+makedepends=( 
 	'git' 'qt5-base' 'opus' 'libva'
 	'libvdpau' 'sdl2' 'sdl2_ttf'
-	'qt5-quickcontrols2' 'qt5-svg')
-depends=('tegra-ffmpeg')
+	'qt5-quickcontrols2' 'qt5-svg'
+	'tegra-ffmpeg')
 
 prepare() {
 	git clone https://github.com/moonlight-stream/moonlight-qt ${pkgbase}-${pkgver}
@@ -24,6 +24,6 @@ build() {
 }
 
 package() {
-	cd ${srcdir}
-	make DESTDIR="${pkgdir}" install
+	cd ${srcdir}/${pkgbase}-${pkgver}/
+	make install DESTDIR="${pkgdir}"
 }
