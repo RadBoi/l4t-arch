@@ -4,3 +4,5 @@ builder/reboot_payload.bin
 tarballs/
 *.tar.xz
 *.gz
+*.img
+*.zip
