@@ -65,11 +65,13 @@ prepare() {
 setup_base(){
 	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/builder/base-pkgs ${root_dir}/tmp/arch-rootfs/
 
+	bsdtar xpf ${root_dir}/tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C ${root_dir}/tmp/arch-rootfs/
+
 	if [[ $staging == "yes" ]]; then
 		cp -r ${root_dir}/pkgbuilds/*/*.pkg.* ${root_dir}/tmp/arch-rootfs/pkgs/
+		cp -r ${root_dir}/pkgbuilds/nvidia-l4t/nvidia-l4t-*/*.pkg.* ${root_dir}/tmp/arch-rootfs/pkgs/
+		tar xf ${root_dir}/kernel-modules.tar.gz -C ${root_dir}/tmp/arch-rootfs/usr/lib/modules/
 	fi
-	
-	bsdtar xpf ${root_dir}/tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C ${root_dir}/tmp/arch-rootfs/
 
 	# Workaround for flakiness of `pt` mirror.
 	sed -i 's/mirror.archlinuxarm.org/de.mirror.archlinuxarm.org/g' ${root_dir}/tmp/arch-rootfs/etc/pacman.d/mirrorlist
@@ -90,9 +92,8 @@ Server = https://9net.org/l4t-arch/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.c
 	umount -R ${root_dir}/tmp/arch-rootfs/boot/
 	umount -R ${root_dir}/tmp/arch-rootfs/
 
-	rm ${root_dir}/tmp/arch-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
-	rm -rf ${root_dir}/tmp/arch-rootfs/{pkgbuilds,build-stage2.sh,pkgs}
-	rm ${root_dir}/tmp/arch-rootfs/usr/bin/qemu-aarch64-static
+	rm ${root_dir}/tmp/arch-rootfs/etc/pacman.d/gnupg/S.gpg-agent* ${root_dir}/tmp/arch-rootfs/usr/bin/qemu-aarch64-static
+	rm -rf ${root_dir}/tmp/arch-rootfs/{build-stage2.sh,pkgs}
 }
 
 buildimg(){

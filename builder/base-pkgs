@@ -8,10 +8,10 @@ pulseaudio
 pulseaudio-alsa
 bluez
 sudo
-lxde
+plasma
+kde-applications
 lightdm
 lightdm-gtk-greeter
 alsa-utils
 joycond-git
 netctl
-dhcpcd
