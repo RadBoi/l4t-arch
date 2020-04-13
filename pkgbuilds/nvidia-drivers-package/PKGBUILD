@@ -64,7 +64,7 @@ package() {
 	cp -r usr/share $pkgdir/usr/share/
 	cp -r usr/bin $pkgdir/usr/bin/
 	# copy sbin
-	cp -r usr/sbin/* $pkgdir/usr/sbin/
+	cp -r usr/sbin/ $pkgdir/usr/
 	# pass through
 	cp -r var/ $pkgdir/var/
 	cp -r opt/ $pkgdir/opt/ 
