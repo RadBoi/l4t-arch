@@ -60,8 +60,8 @@ package() {
 	# These are OK as well...
 	cp -r usr/share $pkgdir/usr/share/
 	cp -r usr/bin $pkgdir/usr/bin/
-	# move sbin -> bin
-	cp -r usr/sbin/* $pkgdir/usr/bin/
+	# copy sbin
+	cp -r usr/sbin/* $pkgdir/usr/sbin/
 	# pass through
 	cp -r var/ $pkgdir/var/
 	cp -r opt/ $pkgdir/opt/ 
