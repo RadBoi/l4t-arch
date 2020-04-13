@@ -7,6 +7,7 @@ license=('GPL')
 url="https://ffmpeg.org/"
 makedepends=('git')
 depends=('jetson-ffmpeg' 'tegra-bsp' 'v4l-utils')
+provides=("ffmpeg")
 
 prepare() {
 	git clone git://source.ffmpeg.org/ffmpeg.git -b release/4.2 --depth=1
