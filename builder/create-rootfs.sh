@@ -118,7 +118,12 @@ buildimg(){
 	mv ${root_dir}/tmp/arch-bootfs/* .
 
 	mkdir -p switchroot/install/
-	mv ${root_dir}/l4t-arch.img switchroot/install/l4t.00
+	mv ${root_dir}/l4t-arch.img switchroot/install/
+
+	cd switchroot/install/
+	split -b4290772992 --numeric-suffixes=0 l4t-arch.img l4t-arch.
+	rm l4t-arch.img
+	cd ../../
 
 	rm ${root_dir}/l4t-arch.7z
 	7z a ${root_dir}/l4t-arch.7z *
