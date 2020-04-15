@@ -7,9 +7,8 @@ pacman-key --populate archlinuxarm
 # we won't be needing this
 pacman -R linux-aarch64 --noconfirm
 
-pacman -Syu `cat base-pkgs` --noconfirm
+pacman -Syu switch-boot-files-bin systemd-suspend-modules xorg-server-tegra tegra-bsp switch-configs `cat base-pkgs` --noconfirm #  linux-tegra gcc7 jetson-ffmpeg tegra-ffmpeg --noconfirm
 pacman -Rdd ffmpeg --noconfirm
-pacman -Syu switch-boot-files-bin systemd-suspend-modules xorg-server-tegra tegra-bsp switch-configs --noconfirm #  linux-tegra gcc7 jetson-ffmpeg tegra-ffmpeg --noconfirm
 
 for pkg in `find /pkgs/*.pkg.* -type f`; do
 	pacman -U $pkg --noconfirm
