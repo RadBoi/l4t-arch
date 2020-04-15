@@ -121,7 +121,7 @@ buildimg(){
 	mv ${root_dir}/l4t-arch.img switchroot/install/
 
 	cd switchroot/install/
-	split -b4290772992 --numeric-suffixes=0 l4t-arch.img l4t-arch.
+	split -b4290772992 --numeric-suffixes=0 l4t-arch.img l4t.
 	rm l4t-arch.img
 	cd ../../
 
