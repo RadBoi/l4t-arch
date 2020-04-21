@@ -38,7 +38,7 @@ done
 
 root_dir="$(dirname "$(dirname "$(readlink -fm "$0")")")"
 
-cleanup(){
+cleanup() {
 	umount -R ${root_dir}/tmp/mnt/*
 	umount -R ${root_dir}/tmp/*
 	rm -rf ${root_dir}/tmp/
@@ -55,14 +55,14 @@ prepare() {
 	fi
 
 	if [[ ! -e ${root_dir}/tmp/arch-rootfs/reboot_payload.bin ]]; then
-		wget https://github.com/CTCaer/hekate/releases/download/v5.1.3/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip -P ${root_dir}/tmp/
-		unzip ${root_dir}/tmp/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip hekate_ctcaer_5.1.3.bin
-		mv hekate_ctcaer_5.1.3.bin ${root_dir}/tmp/arch-rootfs/reboot_payload.bin
-		rm ${root_dir}/tmp/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip
+		wget https://github.com/CTCaer/hekate/releases/download/v5.1.4/hekate_ctcaer_5.1.4_Nyx_0.8.7.zip -P ${root_dir}/tmp/
+		unzip ${root_dir}/tmp/hekate_ctcaer_5.1.4_Nyx_0.8.7.zip hekate_ctcaer_5.1.4.bin
+		mv hekate_ctcaer_5.1.4.bin ${root_dir}/tmp/arch-rootfs/reboot_payload.bin
+		rm ${root_dir}/tmp/hekate_ctcaer_5.1.4_Nyx_0.8.7.zip
 	fi
 }
 
-setup_base(){
+setup_base() {
 	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/builder/base-pkgs ${root_dir}/tmp/arch-rootfs/
 
 	bsdtar xpf ${root_dir}/tarballs/ArchLinuxARM-aarch64-latest.tar.gz -C ${root_dir}/tmp/arch-rootfs/
@@ -70,7 +70,7 @@ setup_base(){
 	if [[ $staging == "yes" ]]; then
 		cp -r ${root_dir}/pkgbuilds/*/*.pkg.* ${root_dir}/tmp/arch-rootfs/pkgs/
 		cp -r ${root_dir}/pkgbuilds/nvidia-l4t/nvidia-l4t-*/*.pkg.* ${root_dir}/tmp/arch-rootfs/pkgs/
-		tar xf ${root_dir}/kernel-modules.tar.gz -C ${root_dir}/tmp/arch-rootfs/usr/lib/modules/
+		7z x ${root_dir}/l4t-kernel.zip lib/ -o${root_dir}/tmp/arch-rootfs/usr/lib/modules/
 	fi
 
 	# Workaround for flakiness of `pt` mirror.
@@ -92,11 +92,11 @@ Server = https://9net.org/l4t-arch/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.c
 	umount -R ${root_dir}/tmp/arch-rootfs/boot/
 	umount -R ${root_dir}/tmp/arch-rootfs/
 
-	rm ${root_dir}/tmp/arch-rootfs/etc/pacman.d/gnupg/S.gpg-agent* ${root_dir}/tmp/arch-rootfs/usr/bin/qemu-aarch64-static
-	rm -rf ${root_dir}/tmp/arch-rootfs/{build-stage2.sh,pkgs}
+	rm ${root_dir}/tmp/arch-rootfs/etc/pacman.d/gnupg/S.gpg-agent* ${root_dir}/tmp/arch-rootfs/usr/bin/qemu-aarch64-static 
+	rm -rf ${root_dir}/tmp/arch-rootfs/{pkgs,build-stage2.sh,base-pkgs}
 }
 
-buildimg(){
+buildimg() {
 	# Get the size in MiB, align it upwards to nearest 4MB. Then add some free space.
 	size=$(du -hs -BM ${root_dir}/tmp/arch-rootfs/ | head -n1 | awk '{print int($1/4)*4 + 4 + 512;}')M
 	echo "Estimated rootfs size: $size"
