@@ -9,13 +9,10 @@ makedepends=(
 	'git' 'qt5-base' 'opus' 'libva'
 	'libvdpau' 'sdl2' 'sdl2_ttf'
 	'qt5-quickcontrols2' 'qt5-svg'
-	'tegra-ffmpeg' 'libffi')
+	'tegra-ffmpeg' 'make' 'openssl-1.0'
+	'pkgconf')
 
 prepare() {
-	# Temporary fix libffi.so.6
-	mkdir -p ${pkgdir}/usr/lib/
-	ln -s /usr/lib/libffi.so ${pkgdir}/usr/lib/libffi.so.6
-
 	git clone https://github.com/moonlight-stream/moonlight-qt ${pkgbase}-${pkgver}
 	cd ${pkgbase}-${pkgver}/
 	git submodule update --init --recursive

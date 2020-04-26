@@ -15,3 +15,9 @@ lightdm-gtk-greeter
 alsa-utils
 joycond-git
 netctl
+
+switch-boot-files-bin
+systemd-suspend-modules
+xorg-server-tegra
+tegra-bsp
+switch-configs 

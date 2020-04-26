@@ -7,7 +7,7 @@ pacman-key --populate archlinuxarm
 # we won't be needing this
 pacman -R linux-aarch64 --noconfirm
 
-pacman -Syu switch-boot-files-bin systemd-suspend-modules xorg-server-tegra tegra-bsp switch-configs `cat base-pkgs` --noconfirm #  linux-tegra gcc7 jetson-ffmpeg tegra-ffmpeg --noconfirm
+pacman -Syu `cat base-pkgs` --noconfirm # TODO: add {linux-tegra gcc7 jetson-ffmpeg tegra-ffmpeg}
 pacman -Rdd ffmpeg --noconfirm
 
 for pkg in `find /pkgs/*.pkg.* -type f`; do
@@ -17,6 +17,7 @@ done
 systemctl enable r2p
 systemctl enable bluetooth
 systemctl enable lightdm
+systemctl enable NetworkManager
 
 echo brcmfmac > /etc/suspend-modules.conf
 sed -i 's/#keyboard=/keyboard=onboard/' /etc/lightdm/lightdm-gtk-greeter.conf
