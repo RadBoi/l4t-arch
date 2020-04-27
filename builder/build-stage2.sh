@@ -16,11 +16,12 @@ done
 
 systemctl enable r2p
 systemctl enable bluetooth
-systemctl enable lightdm
+systemctl enable sddm
 systemctl enable NetworkManager
 
 echo brcmfmac > /etc/suspend-modules.conf
-sed -i 's/#keyboard=/keyboard=onboard/' /etc/lightdm/lightdm-gtk-greeter.conf
+sed -i 's/\[General\]/&\nInputMethod=qtvirtualkeyboard/g' /etc/sddm.conf
+echo "export QT_IM_MODULE=qtvirtualkeyboard" >> /etc/profile.d/qt5-virtualkeyboard.sh
 
 yes | pacman -Scc
 

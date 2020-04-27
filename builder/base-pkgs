@@ -1,7 +1,7 @@
 xorg-xrandr
 xorg-xinput
 xorg-xinit
-onboard
+qt5-virtualkeyboard
 wpa_supplicant
 dialog
 pulseaudio
@@ -10,8 +10,6 @@ bluez
 sudo
 plasma
 kde-applications
-lightdm
-lightdm-gtk-greeter
 alsa-utils
 joycond-git
 netctl
