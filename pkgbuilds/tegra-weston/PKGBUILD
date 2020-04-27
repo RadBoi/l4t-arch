@@ -1,0 +1,26 @@
+pkgname=tegra-weston
+pkgver=R32
+pkgrel=4.2
+pkgdesc="Tegra Weston"
+arch=(any)
+url="nvidia.com"
+license=('GPL')
+groups=()
+depends=()
+makedepends=()
+source=(https://developer.nvidia.com/embedded/L4T/r32_Release_v4.2/t210ref_release_aarch64/Tegra210_Linux_${pkgver}.${pkgrel}_aarch64.tbz2)
+noextract=()
+sha256sums=('SKIP')
+conflicts=(weston)
+
+prepare() {
+    mkdir -p "$pkgname-$pkgver"
+}
+
+build() {
+	tar xvf Linux_for_Tegra/nv_tegra/weston.tbz2
+}
+
+package() {
+	cp -r {etc,usr}/ $pkgdir/
+}

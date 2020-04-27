@@ -15,16 +15,11 @@ prepare() {
 
 build() {
 	cd "${pkgbase}-${pkgver}"/build
-	cmake ..
+	cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 	make -j$(nproc)
 }
 
 package() {
 	cd "${pkgbase}-${pkgver}"/build
-	mkdir -p ${pkgdir}/usr/{lib,include,share}/
-	mkdir -p ${pkgdir}/usr/share/pkgconfig/
-	install -m644 ${srcdir}/"${pkgbase}-${pkgver}"/build/libnvmpi.so.1.0.0 ${pkgdir}/usr/lib/
-	install -m644 ${srcdir}/"${pkgbase}-${pkgver}"/build/libnvmpi.so ${pkgdir}/usr/lib/
-	install -m644 ${srcdir}/"${pkgbase}-${pkgver}"/nvmpi.h ${pkgdir}/usr/include/
-	install -m644 ${srcdir}/"${pkgbase}-${pkgver}"/build/nvmpi.pc ${pkgdir}/usr/share/pkgconfig/
+	make DESTDIR="${pkgdir}" install
 }

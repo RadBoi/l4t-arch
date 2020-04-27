@@ -26,5 +26,5 @@ build() {
 
 package() {
 	cd ${srcdir}/${pkgbase}-${pkgver}/
-	make install DESTDIR="${pkgdir}"
+	make DESTDIR="${pkgdir}" install
 }
