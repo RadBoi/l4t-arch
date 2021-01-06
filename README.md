@@ -17,7 +17,7 @@ On Arch host install `qemu-user-static` from `AUR` and :
 sudo pacman -S qemu qemu-arch-extra arch-install-scripts parted dosfstools wget libarchive p7zip unzip
 ```
 
-### Build
+### Build (Build finishes but it does not boot yet)
 
 On your host :
 
