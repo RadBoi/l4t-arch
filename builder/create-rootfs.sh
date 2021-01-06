@@ -77,7 +77,7 @@ setup_base() {
 	sed -i 's/mirror.archlinuxarm.org/de.mirror.archlinuxarm.org/g' ${root_dir}/tmp/arch-rootfs/etc/pacman.d/mirrorlist
 
 	echo "[switch]
-SigLevel = Optional
+SigLevel = Never
 Server = https://9net.org/l4t-arch/" >> ${root_dir}/tmp/arch-rootfs/etc/pacman.conf
 
 	echo -e "/dev/mmcblk0p1	/boot	vfat	rw,relatime	0	2\n" >> ${root_dir}/tmp/arch-rootfs/etc/fstab
