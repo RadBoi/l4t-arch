@@ -1,6 +1,6 @@
 # L4T-Arch
 
-## Docker Build
+## Docker Build (BROKEN)
 
 ```sh
 git clone https://github.com/RadBoi/l4t-arch/
