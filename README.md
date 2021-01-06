@@ -3,6 +3,7 @@
 ## Docker Build
 
 ```sh
+git clone https://github.com/RadBoi/l4t-arch/
 ./docker-builder/build.sh
 ```
 
